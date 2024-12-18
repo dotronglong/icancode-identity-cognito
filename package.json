@@ -7,7 +7,10 @@
     "dist",
     "src"
   ],
-  "repository": "git@github.com:dotronglong/icancode-identity-cognito.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dotronglong/icancode-identity-cognito.git"
+  },
   "author": "Long Do <dotronglong@live.com>",
   "license": "MIT",
   "scripts": {
