@@ -1,7 +1,12 @@
 {
   "name": "@icancode/identity-cognito",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
   "repository": "git@github.com:dotronglong/icancode-identity-cognito.git",
   "author": "Long Do <dotronglong@live.com>",
   "license": "MIT",
