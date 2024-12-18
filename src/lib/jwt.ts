@@ -10,6 +10,7 @@ import fs from 'fs';
 import { HashMap } from '@icancode/base';
 import { RSAPrivateKeyNotFound, RSAPublicKeyNotFound } from './error';
 import { now } from './time';
+import { env } from './env';
 
 let rsaPrivateKey: KeyLike;
 let rsaPublicKey: KeyLike;
@@ -19,11 +20,11 @@ async function loadPrivateKeyRSA() {
     return rsaPrivateKey;
   }
 
-  if (!process.env.JWT_RSA_KEY) {
+  if (env.JWT_RSA_KEY.length === 0) {
     throw RSAPrivateKeyNotFound;
   }
 
-  const rsaPrivateKeyPem = fs.readFileSync(process.env.JWT_RSA_KEY, 'utf8');
+  const rsaPrivateKeyPem = fs.readFileSync(env.JWT_RSA_KEY, 'utf8');
   rsaPrivateKey = await importPKCS8(rsaPrivateKeyPem, 'RS256');
 
   return rsaPrivateKey;
@@ -34,11 +35,11 @@ async function loadPublicKeyRSA() {
     return rsaPublicKey;
   }
 
-  if (!process.env.JWT_RSA_PUBLIC) {
+  if (env.JWT_RSA_PUBLIC.length === 0) {
     throw RSAPublicKeyNotFound;
   }
 
-  const rsaPublicKeyPem = fs.readFileSync(process.env.JWT_RSA_PUBLIC, 'utf8');
+  const rsaPublicKeyPem = fs.readFileSync(env.JWT_RSA_PUBLIC, 'utf8');
   rsaPublicKey = await importSPKI(rsaPublicKeyPem, 'RS256');
 
   return rsaPublicKey;

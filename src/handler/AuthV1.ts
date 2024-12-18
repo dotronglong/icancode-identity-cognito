@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { handle, log, reply } from '@icancode/express';
 import {
   BadRequestError,
+  ForbiddenError,
   InternalServerError,
   RequestValidationError,
   ResourceNotFoundError,
@@ -21,12 +22,11 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import Joi from 'joi';
 import cognito from '../lib/cognito';
-import { now } from '../lib/time';
 import { getBearerToken } from '../lib/header';
 import { UserNotConfirmedError } from '../lib/error';
-import { signRSA } from '../lib/jwt';
 import { decodeJwt } from 'jose';
 import axios, { AxiosError } from 'axios';
+import { env } from '../lib/env';
 
 const debug = createDebug('icancode:identity-cognito');
 
@@ -168,28 +168,10 @@ async function authenticateUser(request: Request, response: Response) {
       'Response.Body.refreshToken',
     ]);
     const result = await cognito.client.send(command);
-    let data = {};
-    if (
-      result.AuthenticationResult &&
-      result.AuthenticationResult.AccessToken
-    ) {
-      const decodedPayload = decodeJwt(result.AuthenticationResult.AccessToken);
-      const expiresIn = parseInt(process.env.JWT_EXPIRES_IN || '3600');
-      const accessToken = await signRSA(
-        {
-          username: body.username,
-          sub: decodedPayload.sub,
-        },
-        {
-          expiresIn,
-        }
-      );
-      data = {
-        accessToken: accessToken,
-        refreshToken: result.AuthenticationResult.RefreshToken,
-        expiry: now() + expiresIn,
-      };
-    }
+    const data = await cognito.generateTokenResponse(
+      { username: body.username },
+      result
+    );
     reply(response).status(200).json(data);
   } catch (e) {
     if (e instanceof UserNotFoundException) {
@@ -225,27 +207,7 @@ async function refreshToken(request: Request, response: Response) {
   try {
     const result = await cognito.client.send(command);
     log(response).mask(['Response.Body.accessToken']);
-    let data = {};
-    if (
-      result.AuthenticationResult &&
-      result.AuthenticationResult.AccessToken
-    ) {
-      const decodedPayload = decodeJwt(result.AuthenticationResult.AccessToken);
-      const expiresIn = parseInt(process.env.JWT_EXPIRES_IN || '3600');
-      const accessToken = await signRSA(
-        {
-          username,
-          sub: decodedPayload.sub,
-        },
-        {
-          expiresIn,
-        }
-      );
-      data = {
-        accessToken: accessToken,
-        expiry: now() + expiresIn,
-      };
-    }
+    const data = await cognito.generateTokenResponse({ username }, result);
     reply(response).status(200).json(data);
   } catch (e) {
     if (e instanceof UserNotFoundException) {
@@ -266,10 +228,14 @@ async function exchangeToken(
   request: Request,
   response: Response
 ) {
-  const clientId = process.env.COGNITO_CLIENT_ID;
-  const clientSecret = process.env.COGNITO_CLIENT_SECRET;
-  const domain = process.env.COGNITO_DOMAIN;
-  const redirectUri = process.env.COGNITO_REDIRECT_URI;
+  if (!env.COGNITO_USE_PROVIDER) {
+    throw ForbiddenError;
+  }
+
+  const clientId = env.COGNITO_CLIENT_ID;
+  const clientSecret = env.COGNITO_CLIENT_SECRET;
+  const domain = env.COGNITO_DOMAIN;
+  const redirectUri = env.COGNITO_REDIRECT_URI;
   if (!clientId || !clientSecret || !domain || !redirectUri) {
     log(response).error('Missing environment variables.');
     throw InternalServerError;
@@ -295,30 +261,15 @@ async function exchangeToken(
       },
     });
 
-    const { id_token, refresh_token } = result.data;
-    const decodedPayload = decodeJwt(id_token);
-    if (!decodedPayload['cognito:username']) {
-      log(response).error('Unable to detect cognito:username');
+    const { access_token } = result.data;
+    const decodedPayload = decodeJwt(access_token);
+    if (!decodedPayload['username']) {
+      log(response).error('Unable to detect username');
       throw InternalServerError;
     }
 
-    let data = {};
-    const username = `${decodedPayload['cognito:username'] || ''}`;
-    const expiresIn = parseInt(process.env.JWT_EXPIRES_IN || '3600');
-    const accessToken = await signRSA(
-      {
-        username,
-        sub: decodedPayload.sub,
-      },
-      {
-        expiresIn,
-      }
-    );
-    data = {
-      accessToken: accessToken,
-      refreshToken: refresh_token,
-      expiry: now() + expiresIn,
-    };
+    const username = `${decodedPayload['username'] || ''}`;
+    const data = await cognito.generateTokenResponse({ username }, result.data);
 
     reply(response)
       .status(200)

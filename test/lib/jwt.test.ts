@@ -1,13 +1,9 @@
+import 'dotenv/config';
 import { signRSA, verifyRSA } from '../../src/lib/jwt';
 
 describe('lib/jwt', () => {
   let token: string;
   const payload = { userId: 'test-user-id', email: 'test@domain.com' };
-
-  beforeAll(() => {
-    // eslint-disable-next-line
-    require('dotenv').config();
-  });
 
   describe('signRSA', () => {
     it('should be able to sign payload using RSA algorithm', async () => {
