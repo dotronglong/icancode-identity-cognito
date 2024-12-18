@@ -1,0 +1,8 @@
+eslint.config.mjs
+jest.config.js
+.prettierignore
+.prettierrc
+test/
+.github/
+.env*
+assets/
