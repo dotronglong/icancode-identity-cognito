@@ -66,11 +66,13 @@ class Cognito {
       throw new Error('COGNITO_POOL_ID is missing');
     }
 
-    this.accessTokenVerifier = CognitoJwtVerifier.create({
-      userPoolId: this.userPoolId,
-      tokenUse: 'access',
-      clientId: this.clientId,
-    });
+    if (!env.COGNITO_USE_JWT) {
+      this.accessTokenVerifier = CognitoJwtVerifier.create({
+        userPoolId: this.userPoolId,
+        tokenUse: 'access',
+        clientId: this.clientId,
+      });
+    }
   }
 
   getSecretHash(username: string): string {

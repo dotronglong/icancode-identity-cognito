@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { handleError, ModuleLoader } from '@icancode/express';
 import express from 'express';
 import IdentityCognito from '../src/index';

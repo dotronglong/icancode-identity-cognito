@@ -1,6 +1,6 @@
 {
   "name": "@icancode/identity-cognito",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -19,7 +19,8 @@
     "fix": "yarn format && yarn lint --fix",
     "build": "tsc",
     "test": "jest",
-    "test:debug": "DEBUG=icancode:*,app jest"
+    "test:debug": "DEBUG=icancode:*,app jest",
+    "dev": "nodemon"
   },
   "devDependencies": {
     "@eslint/js": "^9.12.0",
