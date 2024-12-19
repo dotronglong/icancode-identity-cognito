@@ -17,7 +17,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "fix": "yarn format && yarn lint --fix",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "test": "jest",
