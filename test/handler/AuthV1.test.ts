@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import request from 'supertest';
 import express from 'express';
 import { now } from '../../src/lib/time';
