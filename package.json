@@ -46,7 +46,7 @@
     "typescript-eslint": "^8.9.0"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.714.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.716.0",
     "@icancode/base": "^1.1.0",
     "@icancode/express": "^1.1.10",
     "@icancode/logger": "^1.0.4",
