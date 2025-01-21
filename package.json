@@ -49,7 +49,7 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.714.0",
     "@icancode/base": "^1.1.0",
     "@icancode/express": "^1.1.10",
-    "@icancode/logger": "^1.0.4",
+    "@icancode/logger": "^1.1.1",
     "aws-jwt-verify": "^4.0.1",
     "axios": "^1.7.9",
     "dotenv": "^16.4.5",
