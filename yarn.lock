@@ -835,13 +835,13 @@
   optionalDependencies:
     debug "^4.4.0"
 
-"@icancode/express@^1.1.10":
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/@icancode/express/-/express-1.1.12.tgz#0f40f89c37eb4d75b7c515a2701a35c34202f61b"
-  integrity sha512-voExX03o/9yAQqmBYTqm2yyR52+HIMj44n1ou7FD1vc/ZVW8dJwafmoDte0Epk8xl0R6MNx+IQI+DC6QmEi5aw==
+"@icancode/express@^1.1.15":
+  version "1.1.15"
+  resolved "https://registry.yarnpkg.com/@icancode/express/-/express-1.1.15.tgz#ff7f7d7efe9f65e0b1dfa34199044775942547a5"
+  integrity sha512-XC2HVzvS1v8iwuf+BXceNCdoOz5pW196PL8ThVj8rJ97zPOgYYCmZlsnym7P2pYKR61BrGJKgxxb1RSsgh573A==
   dependencies:
     "@icancode/base" "^1.1.9"
-    "@icancode/logger" "^1.0.4"
+    "@icancode/logger" "^1.1.0"
     uuid "^11.0.3"
 
 "@icancode/logger@^1.0.4":
@@ -850,6 +850,13 @@
   integrity sha512-/qvKfcjeJJ31KXinseD2SrHpXsUi5y1HR1fdna8/oHC4W5ICsCrJ0L5KT2jAoBscczlH9Dqud14in4JhQuPfEA==
   dependencies:
     "@icancode/base" "^1.0.1"
+
+"@icancode/logger@^1.1.0":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@icancode/logger/-/logger-1.1.1.tgz#b62d197861b19b94288e02aa4b590fb723399199"
+  integrity sha512-Tyb3poX0QIFML3RUQyTynjghDRqblfA73549C0ZrtOVqm28oV1kjfFxrsqT1aMkLvxnSQWVkA/sCN1XkT546SQ==
+  dependencies:
+    "@icancode/base" "^1.1.0"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
