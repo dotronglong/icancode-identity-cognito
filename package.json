@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.714.0",
-    "@icancode/base": "^1.1.0",
+    "@icancode/base": "^1.1.11",
     "@icancode/express": "^1.1.10",
     "@icancode/logger": "^1.0.4",
     "aws-jwt-verify": "^4.0.1",
